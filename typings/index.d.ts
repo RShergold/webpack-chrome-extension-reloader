@@ -12,11 +12,12 @@ declare type EntriesOption = { background: string, contentScript: string };
 
 declare type MiddlewareTemplateParams = { port: number, reloadPage: boolean };
 
+declare type LogLevel = "log" | "info" | "warn" | "error" | "debug";
+
 declare module '*.json' {
     const json: any;
     export = json;
 }
-
 declare module '*.txt' {
     const text: string;
     export = text;

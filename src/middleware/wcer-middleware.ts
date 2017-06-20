@@ -17,11 +17,11 @@
     const SOCKET_ERR_CODE_REF = 'https://tools.ietf.org/html/rfc6455#section-7.4.1';
 
     const formatter = (msg: string) => `[ WCER: ${msg} ]`;
-    const logger = (msg, level = 'info') => console[level](formatter(msg));
+    const logger = (msg: string, level: LogLevel = 'info') => msg && console[level](formatter(msg));
     const timeFormatter = (date: Date) => date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
 
     function contentScriptWorker() {
-        runtime.sendMessage({type: SIGN_CONNECT}, msg => console.info(msg));
+        runtime.sendMessage({type: SIGN_CONNECT}, logger);
 
         runtime.onMessage.addListener(({type, payload}: Action) => {
             switch (type) {
@@ -31,7 +31,7 @@
                     break;
 
                 case SIGN_LOG:
-                    console.info(payload);
+                    logger(payload);
                     break;
             }
         });

@@ -1,11 +1,11 @@
 import {assert} from "chai";
 import {useFakeTimers} from "sinon";
-import debouncer from "../src/decorators/@debouncer";
+import debouncer from "../src/decorators/@debounce";
 import {DEBOUNCING_FRAME} from "../src/constants/fast-reloading.constants";
 
 const _ = require("lodash");
 
-describe("debouncer decorator", () => {
+describe("debounce decorator", () => {
     let calls;
     const clock = useFakeTimers();
 

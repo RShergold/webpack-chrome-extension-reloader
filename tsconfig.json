@@ -12,6 +12,8 @@
     ],
     "types": [
       "node",
+      "webpack",
+      "webpack-env",
       "mocha",
       "chrome"
     ]

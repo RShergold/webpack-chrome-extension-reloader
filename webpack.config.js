@@ -10,9 +10,9 @@ const { production, development, test } = ["production", "development", "test"].
 module.exports = {
   target: "node",
   entry: test({
-    "tests": './specs/index.specs.ts'
-  }) || { "webpack-chrome-extension-reloader": './src/index.ts' },
-  devtool: "source-map",
+    "tests": "./specs/index.specs.ts"
+  }) || { "webpack-chrome-extension-reloader": "./src/index.ts" },
+  devtool: production("source-map") || development("source-map") || test("inline-source-map"),
   output: {
     publicPath: ".",
     path: path.resolve(__dirname, "./dist"),
@@ -27,7 +27,7 @@ module.exports = {
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"],
     mainFiles: ["index"],
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: [".ts", ".tsx", ".js"],
   },
   module: {
     rules: [{

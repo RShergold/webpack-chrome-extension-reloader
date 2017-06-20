@@ -1,2 +1,2 @@
 import "./middlewareSourceBuilder.specs";
-import "./@debouncer.specs";
+import "./@debounce.specs";

@@ -1,39 +1,29 @@
-import {OPEN, Server} from "ws";
+import {Subject} from "rxjs/Subject";
+import {blue, red, yellow} from "colors/safe";
+
+import WebsocketServerFactory from "./WebsocketServerFactory";
+import {FAST_RELOAD_CALLS, FAST_RELOAD_WAIT} from "../constants/fast-reloading.constants";
 import {signChange} from "./signals";
-import debouncer from "../decorators/@debouncer";
 import fastReloadBlock from "../decorators/@fastReloadBlock";
-import {DEBOUNCING_FRAME, FAST_RELOAD_CALLS, FAST_RELOAD_WAIT} from "../constants/fast-reloading.constants";
 
 export default class HotReloaderServer {
-    _server: Server;
+    private _server$: Subject<any>;
 
     constructor(port: number) {
-        this._server = new Server({port});
+        this._server$ = WebsocketServerFactory.build(port);
     }
 
     listen() {
-        this._server.on('connection', ws => {
-            ws.on('message', data => console.info(`Message from the client: ${JSON.parse(data).payload}`));
-        });
+        this._server$.subscribe(
+            event => console.info(blue(`Message from the client: ${JSON.parse(event.data).payload}`)),
+            err => console.error(red(err)),
+            () => console.warn(yellow('Connection closed'))
+        );
     }
 
-    @debouncer(DEBOUNCING_FRAME)
     @fastReloadBlock(FAST_RELOAD_CALLS, FAST_RELOAD_WAIT)
-    signChange(reloadPage, done: Function) {
-        try {
-            this._sendMsg(signChange({reloadPage}));
-            done();
-        }
-        catch (err) {
-            done(err);
-        }
-    }
-
-    private _sendMsg(msg: any) {
-        this._server.clients.forEach(client => {
-            if (client.readyState === OPEN) {
-                client.send(JSON.stringify(msg));
-            }
-        });
+    signChange(reloadPage) {
+        console.info(blue("\n[ Notifying changes to the extension ]"));
+        this._server$.next(signChange({reloadPage}));
     }
 }

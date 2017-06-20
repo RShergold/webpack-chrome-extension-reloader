@@ -31,6 +31,7 @@
   "dependencies": {
     "colors": "^1.1.2",
     "lodash": "^4.17.4",
+    "rxjs": "^5.4.1",
     "webpack-sources": "^0.2.3",
     "ws": "^3.0.0"
   },
@@ -45,6 +46,7 @@
     "@types/mocha": "^2.2.41",
     "@types/sinon": "^2.3.1",
     "@types/webpack": "^2.2.15",
+    "@types/webpack-env": "^1.13.0",
     "@types/ws": "^0.0.41",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
@@ -59,6 +61,8 @@
     "babel-preset-stage-0": "^6.22.0",
     "chai": "^4.0.2",
     "copy-webpack-plugin": "^4.0.1",
+    "istanbul": "^0.4.5",
+    "istanbul-sourcemap-report": "^0.1.0",
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^2.1.2",
     "json-loader": "^0.5.4",

@@ -2,10 +2,12 @@ src/
 sample/
 typings/
 specs/
+coverage/
 dist/tests.js
 dist/tests.js.map
 .idea/
 .vscode/
+.tmp/
 .babelrc
 .gitignore
 tsconfig.json

@@ -4,6 +4,12 @@ import middlewareSourceBuilder from "./utils/middleware-source-builder";
 import middlewareInjector from "./utils/middleware-injector";
 import {green} from "colors/safe";
 
+import "rxjs/add/operator/distinctUntilChanged";
+import "rxjs/add/operator/debounceTime";
+
+import {Observable} from "rxjs/Observable";
+import {DEBOUNCING_FRAME} from "./constants/fast-reloading.constants";
+
 export default class ChromeExtensionReloader extends AbstractChromePluginReloader {
     private _opts: PluginOptions;
     private _source: string;
@@ -29,14 +35,13 @@ export default class ChromeExtensionReloader extends AbstractChromePluginReloade
         const server = new HotReloaderServer(port);
         server.listen();
 
-        compiler.plugin("emit", (comp, call) => {
-            if (this._hash !== comp.hash) {
-                this._hash = comp.hash;
-                server.signChange(reloadPage, call);
-            }
-            else {
+        Observable
+            .create(obs => compiler.plugin("emit", (comp, call) => {
                 call();
-            }
-        });
+                return obs.next(comp.hash);
+            }))
+            .distinctUntilChanged()
+            .debounceTime(DEBOUNCING_FRAME)
+            .subscribe(() => server.signChange(reloadPage));
     }
 }
