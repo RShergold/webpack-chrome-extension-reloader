@@ -6,6 +6,7 @@ import {green} from "colors/safe";
 
 import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/operator/debounceTime";
+import "rxjs/add/operator/share";
 
 import {Observable} from "rxjs/Observable";
 import {DEBOUNCING_FRAME} from "./constants/fast-reloading.constants";
@@ -35,12 +36,13 @@ export default class ChromeExtensionReloader extends AbstractChromePluginReloade
         const server = new HotReloaderServer(port);
         server.listen();
 
-        Observable
-            .create(obs => compiler.plugin("emit", (comp, call) => {
-                call();
-                return obs.next(comp.hash);
-            }))
-            .distinctUntilChanged()
+        let compilation$ = Observable.create(obs => compiler.plugin("emit", (comp, call) => {
+            call();
+            obs.next(comp);
+        }));
+
+        compilation$
+            .distinctUntilChanged((prev, curr) => prev.hash === curr.hash)
             .debounceTime(DEBOUNCING_FRAME)
             .subscribe(() => server.signChange(reloadPage));
     }

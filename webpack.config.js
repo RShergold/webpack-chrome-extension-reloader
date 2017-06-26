@@ -21,7 +21,7 @@ module.exports = {
 
   },
   plugins: [
-    production(new webpack.optimize.UglifyJsPlugin())
+    production(new webpack.optimize.UglifyJsPlugin({sourceMap: true}))
   ].filter((plugin) => !!plugin),
   externals: [Object.keys(pack.dependencies)],
   resolve: {

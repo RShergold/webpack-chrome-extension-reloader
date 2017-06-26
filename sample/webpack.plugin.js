@@ -1,3 +1,4 @@
+const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const WebpackChromeReloaderPlugin = require("..");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -9,7 +10,7 @@ module.exports = {
   },
   output: {
     publicPath: ".",
-    path: __dirname + "/dist",
+    path: path.resolve("./sample/dist"),
     filename: "[name].js",
     libraryTarget: "umd"
   },
